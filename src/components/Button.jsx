@@ -8,6 +8,7 @@ const Button = ({
   isLoading,
   loadingText,
   className, // New prop for custom styles
+  
 }) => {
   return (
     <button
