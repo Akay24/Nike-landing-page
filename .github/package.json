@@ -1,0 +1,10 @@
+{
+  "name": "ai-reviewer",
+  "version": "1.0.0",
+  "main": "review.js",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "openai": "^4.0.0",
+    "@octokit/rest": "^20.0.0"
+  }
+}
