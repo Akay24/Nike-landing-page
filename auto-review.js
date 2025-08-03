@@ -1,49 +1,76 @@
-require("dotenv").config();
-const { Octokit } = require("@octokit/rest");
-const { Configuration, OpenAIApi } = require("openai");
+// auto-review.js (ES module compatible)
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-const openai = new OpenAIApi(new Configuration({ apiKey: process.env.OPENAI_API_KEY }));
+import dotenv from "dotenv";
+import { Octokit } from "@octokit/rest";
+import OpenAI from "openai";
+
+dotenv.config();
+
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-const prNumber = process.env.GITHUB_REF.split("/").pop();
+const prNumber = process.env.PR_NUMBER;
 
-(async () => {
-  const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number: prNumber });
+async function getPullRequestDiff() {
+  const { data } = await octokit.pulls.get({
+    owner,
+    repo,
+    pull_number: prNumber,
+  });
 
-  let diff = "";
-  for (const file of files) {
-    if (file.patch) {
-      diff += `File: ${file.filename}\n${file.patch}\n\n`;
-    }
-  }
+  return data.diff_url;
+}
 
-  if (!diff.trim()) {
-    console.log("No changes to review.");
-    return;
-  }
+async function fetchDiffText(diffUrl) {
+  const response = await fetch(diffUrl);
+  return await response.text();
+}
 
-  const prompt = `
-You are a senior developer. Analyze the following GitHub Pull Request diff and provide a review summary with helpful suggestions, code quality notes, and potential improvements. Don't repeat the diff.
-
-Diff:
-${diff}
-`;
-
-  const completion = await openai.createChatCompletion({
+async function generateReview(diff) {
+  const response = await openai.chat.completions.create({
     model: "gpt-4",
-    messages: [{ role: "user", content: prompt }],
+    messages: [
+      {
+        role: "system",
+        content: "You are a helpful and experienced code reviewer. Provide concise, actionable feedback.",
+      },
+      {
+        role: "user",
+        content: `Please review the following GitHub pull request diff:\n\n${diff}`,
+      },
+    ],
     temperature: 0.2,
   });
 
-  const feedback = completion.data.choices[0].message.content;
+  return response.choices[0].message.content;
+}
 
+async function commentOnPR(review) {
   await octokit.issues.createComment({
     owner,
     repo,
     issue_number: prNumber,
-    body: `🤖 **AI Code Review Summary**\n\n${feedback}`,
+    body: review,
   });
+}
 
-  console.log("AI review comment posted!");
-})();
+async function run() {
+  try {
+    const diffUrl = await getPullRequestDiff();
+    const diff = await fetchDiffText(diffUrl);
+    const review = await generateReview(diff);
+    await commentOnPR(review);
+    console.log("✅ Review successfully posted to the pull request.");
+  } catch (error) {
+    console.error("❌ Error during review:", error.message);
+    process.exit(1);
+  }
+}
+
+run();
