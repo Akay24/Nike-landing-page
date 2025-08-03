@@ -1,10 +1,12 @@
 {
-  "name": "ai-reviewer",
+  "name": "auto-review",
   "version": "1.0.0",
-  "main": "review.js",
+  "main": "auto-review.js",
+  "scripts": {
+    "review": "node auto-review.js"
+  },
+  "type": "module",         // if you're using ES6 imports
   "dependencies": {
-    "dotenv": "^16.0.3",
-    "openai": "^4.0.0",
-    "@octokit/rest": "^20.0.0"
+    // Optional: add dependencies like eslint here
   }
 }
