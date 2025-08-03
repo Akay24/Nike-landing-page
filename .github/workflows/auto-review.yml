@@ -1,0 +1,24 @@
+name: Auto Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run auto-review script
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: |
+          npm install
+          node auto-review.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
