@@ -12,13 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run auto-review script
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - run: |
+      - name: Install dependencies and run review script
+        run: |
           npm install
-          node auto-review.js
+          node review.js  # <-- Fix: match your actual filename
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
