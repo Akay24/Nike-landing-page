@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -20,6 +20,6 @@ jobs:
       - name: Install dependencies and run review script
         run: |
           npm install
-          node review.js  # <-- Fix: match your actual filename
+          node review.js   # <- corrected filename
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
