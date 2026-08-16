@@ -1,12 +1,10 @@
-// PopularProducts.jsx
-
 import React from "react";
-import { products } from "../constants"; // Importing the list of products
+import { products } from "../constants";
 import PopularProductCard from "../components/PopularProductCard"; 
 
-const PopularProducts = () => {
+const PopularProducts = ({ onQuickView, onAddToCart }) => {
   return (
-    <section id="products" className="max-container max-sm:mt-12">
+    <section id="products" className="max-container max-sm:mt-12 padding-x">
       <div className="flex flex-col justify-start gap-5">
         <h2 className="text-4xl font-palanquin font-bold">
           Our <span className="text-coral-red">Popular</span> Products
@@ -16,13 +14,18 @@ const PopularProducts = () => {
         </p>
       </div>
 
-      <div className="mt-16 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-14">
+      <div className="mt-12 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-8">
         {products.map((product) => (
-          <PopularProductCard key={product.name} {...product} /> // Spread the product properties
+          <PopularProductCard 
+            key={product.id || product.name} 
+            product={product}
+            onQuickView={onQuickView}
+            onAddToCart={onAddToCart}
+          />
         ))}
       </div>
     </section>
   );
 };
 
-export default PopularProducts; // Default export
+export default PopularProducts;

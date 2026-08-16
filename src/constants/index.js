@@ -31,31 +31,44 @@ export const statistics = [
 
 export const products = [
     {
+        id: "prod-1",
         imgURL: shoe4,
         name: "Nike Air Jordan-01",
         price: "$200.20",
-        rating:"4.5"
+        numericPrice: 200.20,
+        rating: "4.5",
+        description: "Crafted with premium leather, responsive Air-Sole cushioning, and classic high-top silhouette for iconic court-to-street style.",
+        sizes: ["US 7", "US 8", "US 9", "US 10", "US 11"]
     },
     {
+        id: "prod-2",
         imgURL: shoe5,
         name: "Nike Air Jordan-10",
         price: "$210.20",
-        rating:"4.6"
-
+        numericPrice: 210.20,
+        rating: "4.6",
+        description: "Featuring plush ankle padding, lightweight foam midsole, and signature grip outsole engineered for maximum agility and comfort.",
+        sizes: ["US 8", "US 9", "US 10", "US 11", "US 12"]
     },
     {
+        id: "prod-3",
         imgURL: shoe6,
         name: "Nike Air Jordan-100",
         price: "$220.20",
-        rating:"4.5"
-
+        numericPrice: 220.20,
+        rating: "4.5",
+        description: "Future-ready design with breathable mesh paneling, responsive Zoom Air unit, and futuristic heel clip stability.",
+        sizes: ["US 7.5", "US 8.5", "US 9.5", "US 10.5", "US 11.5"]
     },
     {
+        id: "prod-4",
         imgURL: shoe7,
         name: "Nike Air Jordan-001",
         price: "$230.20",
-        rating:"4.0"
-
+        numericPrice: 230.20,
+        rating: "4.8",
+        description: "Heritage craftsmanship meets modern performance. Reinforced overlay support and multi-surface traction for modern athletes.",
+        sizes: ["US 8", "US 9", "US 10", "US 11"]
     },
 ];
 
